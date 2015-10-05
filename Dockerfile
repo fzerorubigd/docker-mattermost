@@ -2,14 +2,14 @@ FROM ubuntu:trusty
 MAINTAINER fzerorubigd <fzero@rubi.gd> @fzerorubigd
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-		wget \
+        wget \
         jq \
-	&& rm -rf /var/lib/apt/lists/*
+     && rm -rf /var/lib/apt/lists/*
 
 
 RUN groupadd -r mattermost && useradd -r -g mattermost mattermost
 
-WORKDIR /home/mattermost/
+WORKDIR /home/mattermost/mattermost
 
 RUN wget --no-check-certificate https://github.com/mattermost/platform/releases/download/v1.0.0/mattermost.tar.gz \
          && tar -xvzf mattermost.tar.gz \
