@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -euo pipefail
+#set -euo pipefail
 
 DB_TYPE=${DB_TYPE:-postgres}
 DB_HOST=${DB_HOST:-${POSTGRESQL_PORT_5432_TCP_ADDR}}
@@ -17,7 +17,7 @@ DB_PASS=${DB_PASS:-${POSTGRESQL_ENV_POSTGRES_PASSWORD}}
 POSTGRESQL_HOST=${DB_HOST}
 POSTGRESQL_PORT=${DB_PORT}
 FILE=$1
-if [ ${FILE: -5} == ".json" ]; then
+if [ "${FILE: -5}" == ".json" ]; then
     if [ ! -f ${FILE} ]; then
         cp /home/mattermost/mattermost/config/config.json ${FILE}
     fi
@@ -27,7 +27,7 @@ if [ ${FILE: -5} == ".json" ]; then
     ENVLIST=$(env | grep MATTERMOST_)
     ALL_ARR=($ENVLIST)
     for KEY in ${ALL_ARR[@]};
-    do;
+        do
         JSON_KEY=$(echo $KEY | cut -d= -f1 | tr '[:upper:]' '[:lower:]' |sed 's/mattermost/./g' | sed -r 's/(^|_)([a-z])/\U\2/g' | sed 's/_/./g')
         JSON_VALUE=$(echo $KEY | cut -d= -f2)
         TMP=$(echo $JSON| jq "del($JSON_KEY)")
