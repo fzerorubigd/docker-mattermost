@@ -19,7 +19,7 @@ RUN mkdir -p /mattermost/data
 
 RUN chown -R mattermost:mattermost /mattermost/data
 
-VOLUME /mattermost/data
+VOLUME /mattermost
 
 ADD docker-initscript.sh /sbin/docker-initscript.sh
 RUN chmod 755 /sbin/docker-initscript.sh
