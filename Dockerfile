@@ -23,6 +23,6 @@ VOLUME /mattermost
 
 ADD docker-initscript.sh /sbin/docker-initscript.sh
 RUN chmod 755 /sbin/docker-initscript.sh
-EXPOSE 8086/tcp
+EXPOSE 8065/tcp
 ENTRYPOINT ["/sbin/docker-initscript.sh"]
 CMD ["/mattermost/config.json"]
