@@ -23,13 +23,17 @@ if [ ${FILE: -5} == ".json" ]; then
     fi
     # overwrite all the keys 
     
-    JSON=$(cat $FILE | jq '.SqlSettings.DriverName="postgres"' | jq '.SqlSettings.DataSource="postgres://${DB_USER}:${DB_PASS}@${DB_HOST}:${DB_PORT}/${DB_NAME}?sslmode=disable&connect_timeout=10"')
-    ENVLIST=$(env | grep MATTERMUST)
+    JSON=$(cat $FILE | jq '.SqlSettings.DriverName="postgres"' | jq ".SqlSettings.DataSource=\"postgres://${DB_USER}:${DB_PASS}@${DB_HOST}:${DB_PORT}/${DB_NAME}?sslmode=disable&connect_timeout=10\"")
+    ENVLIST=$(env | grep MATTERMOST_)
     ALL_ARR=($ENVLIST)
-    for KEY in ${ALL_ARR[@]};do;
-        JSON_KEY=$(echo $KEY | cut -d= -f1 | tr '[:upper:]' '[:lower:]' |sed 's/mattermust/./g' | sed -r 's/(^|_)([a-z])/\U\2/g')
+    for KEY in ${ALL_ARR[@]};
+    do;
+        JSON_KEY=$(echo $KEY | cut -d= -f1 | tr '[:upper:]' '[:lower:]' |sed 's/mattermost/./g' | sed -r 's/(^|_)([a-z])/\U\2/g' | sed 's/_/./g')
         JSON_VALUE=$(echo $KEY | cut -d= -f2)
-        JSON=$(echo $JSON| jq '$JSON_KEY="$JSON_VALUE"')
+        TMP=$(echo $JSON| jq "del($JSON_KEY)")
+        JSON=$(echo $TMP | jq "$JSON_KEY=\"$JSON_VALUE\"")
+        echo $JSON_KEY
+        echo $JSON_VALUE
     done;
     
     echo $JSON > ${FILE}
